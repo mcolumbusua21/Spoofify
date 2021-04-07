@@ -4,7 +4,7 @@ const SpotifyStrategy = require("passport-spotify").Strategy;
 const path = require("path");
 const express = require("express");
 const session = require('express-session');
-// const exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const routes = require('./controllers');
 
 // const sequelize = require('./config/connection');
@@ -68,43 +68,6 @@ passport.use(
   )
 );
 
-<<<<<<< HEAD
-app.get('/login', isAuth, (req, res) => {
-  res.redirect('/')
-})
-
-app.get('/', (req, res) => {
-//   res.send(`Welcome, ${currentUser}!`)
-    res.render('login')
-})
-
-app.get("/auth/spotify", passport.authenticate("spotify"), function (req, res) {
-  // The request will be redirected to spotify for authentication, so this
-  // function will not be called.
-});
-
-app.get(
-  "/auth/spotify/callback",
-  passport.authenticate("spotify", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    currentUser = req.user.displayName
-    res.redirect('/')
-  }
-);
-
-app.get(
-  "/auth/spotify",
-  passport.authenticate("spotify", {
-    scope: ["user-read-email", "user-read-private"],
-  }),
-  function (req, res) {
-    // The request will be redirected to spotify for authentication, so this
-    // function will not be called.
-  }
-);
-=======
->>>>>>> a5503de0b04580bde03174f0840dde2c55544ca9
 
 
 app.listen(PORT, () => console.log("Now listening", PORT));
