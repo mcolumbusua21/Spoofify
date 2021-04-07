@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { User } = require('../models');
 const withAuth = require('../utils/auth')
 const passport = require("passport");
-let currentUser;
+
 
 
 router.get('/login', isAuth, (req, res) => {
@@ -10,7 +10,8 @@ router.get('/login', isAuth, (req, res) => {
   })
   
   router.get('/', (req, res) => {
-    res.send(`Welcome, ${currentUser}!`)
+
+    res.render('login')
   })
   
   router.get("/auth/spotify", passport.authenticate("spotify"), function (req, res) {
@@ -23,7 +24,7 @@ router.get('/login', isAuth, (req, res) => {
     passport.authenticate("spotify", { failureRedirect: "/login" }),
     function (req, res) {
       // Successful authentication, redirect home.
-      currentUser = req.user.displayName
+      res.render('login', req.user)
       res.redirect('/')
     }
   );
