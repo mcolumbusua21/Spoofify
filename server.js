@@ -3,7 +3,6 @@ const passport = require("passport");
 const SpotifyStrategy = require("passport-spotify").Strategy;
 const path = require("path");
 const express = require("express");
-let currentUser;
 const session = require('express-session');
 // const exphbs = require('express-handlebars');
 // const routes = require('./controllers');
