@@ -3,10 +3,9 @@ const passport = require("passport");
 const SpotifyStrategy = require("passport-spotify").Strategy;
 const path = require("path");
 const express = require("express");
-let currentUser;
 const session = require('express-session');
-const exphbs = require('express-handlebars');
-// const routes = require('./controllers');
+// const exphbs = require('express-handlebars');
+const routes = require('./controllers');
 
 // const sequelize = require('./config/connection');
 
@@ -37,8 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
-
-// app.use(routes);
+app.use(routes);
 
 // sequelize.sync({ force: false }).then(() => {
 //
@@ -70,6 +68,7 @@ passport.use(
   )
 );
 
+<<<<<<< HEAD
 app.get('/login', isAuth, (req, res) => {
   res.redirect('/')
 })
@@ -104,10 +103,8 @@ app.get(
     // function will not be called.
   }
 );
+=======
+>>>>>>> a5503de0b04580bde03174f0840dde2c55544ca9
 
-function isAuth(req, res, next) {
-  if (req.isAuthenticated()) return next()
-  res.redirect('/auth/spotify')
-}
 
 app.listen(PORT, () => console.log("Now listening", PORT));
