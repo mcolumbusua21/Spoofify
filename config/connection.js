@@ -1,22 +1,15 @@
-// require('dotenv').config()
-// const passport = require('passport')
-// const SpotifyStrategy = require('passport-spotify').Strategy;
+const Sequelize = require('sequelize');
+require('dotenv').config();
 
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: 'localhost',
+    dialect: 'mysql',
+    port: 3001,
+  }
+);
 
-
-// passport.use(
-//     new SpotifyStrategy(
-//         {
-//             clientID:  process.env.client_id,
-//             clientSecret:   process.env.client_secret,
-//             callbackURL: 'http://localhost:3001/auth/spotify/callback'
-
-
-//         },
-//         function(accessToken, refreshToken, expires_in, profile, done){
-//             userInfo.findOrCreate({ spotifyId: profile.id }), function(err, user) {
-//                 return done(err, user);
-//             }
-//         }
-//     )
-// )
+module.exports = sequelize;
