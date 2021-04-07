@@ -5,7 +5,7 @@ const path = require("path");
 const express = require("express");
 const session = require('express-session');
 // const exphbs = require('express-handlebars');
-// const routes = require('./controllers');
+const routes = require('./controllers');
 
 // const sequelize = require('./config/connection');
 
@@ -36,8 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
-
-// app.use(routes);
+app.use(routes);
 
 // sequelize.sync({ force: false }).then(() => {
 //
@@ -69,43 +68,6 @@ passport.use(
   )
 );
 
-app.get('/login', isAuth, (req, res) => {
-  res.redirect('/')
-})
 
-app.get('/', (req, res) => {
-  res.send(`Welcome, ${currentUser}!`)
-})
-
-app.get("/auth/spotify", passport.authenticate("spotify"), function (req, res) {
-  // The request will be redirected to spotify for authentication, so this
-  // function will not be called.
-});
-
-app.get(
-  "/auth/spotify/callback",
-  passport.authenticate("spotify", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    currentUser = req.user.displayName
-    res.redirect('/')
-  }
-);
-
-app.get(
-  "/auth/spotify",
-  passport.authenticate("spotify", {
-    scope: ["user-read-email", "user-read-private"],
-  }),
-  function (req, res) {
-    // The request will be redirected to spotify for authentication, so this
-    // function will not be called.
-  }
-);
-
-function isAuth(req, res, next) {
-  if (req.isAuthenticated()) return next()
-  res.redirect('/auth/spotify')
-}
 
 app.listen(PORT, () => console.log("Now listening", PORT));
