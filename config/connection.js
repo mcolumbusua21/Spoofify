@@ -1,34 +1,22 @@
-const SpotifyStrategy = require('passport-spotify').Strategy;
+// require('dotenv').config()
+// const passport = require('passport')
+// const SpotifyStrategy = require('passport-spotify').Strategy;
 
 
 
+// passport.use(
+//     new SpotifyStrategy(
+//         {
+//             clientID:  process.env.client_id,
+//             clientSecret:   process.env.client_secret,
+//             callbackURL: 'http://localhost:3001/auth/spotify/callback'
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-passport.use(
-    new SpotifyStrategy(
-        {
-            clientID:  a5db0c08702e4ff4a09336b64996505f,
-            clientSecret:   b45f965b45934b2d9ed8295ace736448,
-            callbackURL: 'http://localhost:3001/auth/spotify/callback'
-
-
-        },
-        function(accessToken, refreshToken, expires_in, profile, done){
-            userInfo.findOrCreate({ spotifyId: profile.id }), function(err, user) {
-                return done(err, user);
-            }
-        }
-    )
-)
+//         },
+//         function(accessToken, refreshToken, expires_in, profile, done){
+//             userInfo.findOrCreate({ spotifyId: profile.id }), function(err, user) {
+//                 return done(err, user);
+//             }
+//         }
+//     )
+// )
