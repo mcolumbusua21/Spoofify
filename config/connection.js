@@ -1,4 +1,6 @@
+
 const SpotifyStrategy = require('passport-spotify').Strategy;
+
 
 
 
@@ -19,8 +21,8 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 passport.use(
     new SpotifyStrategy(
         {
-            clientID:  a5db0c08702e4ff4a09336b64996505f,
-            clientSecret:   b45f965b45934b2d9ed8295ace736448,
+            clientID:  process.env.client_id,
+            clientSecret:   process.env.client_secret,
             callbackURL: 'http://localhost:3001/auth/spotify/callback'
 
 
