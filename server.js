@@ -6,8 +6,9 @@ const express = require("express");
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const routes = require('./controllers');
+const { User } = require("./models");
 
-// const sequelize = require('./config/connection');
+const sequelize = require('./config/connection');
 
 const hbs = exphbs.create({});
 
@@ -38,9 +39,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 app.use(routes);
 
-// sequelize.sync({ force: false }).then(() => {
-//
-//   });
+
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -56,18 +55,29 @@ passport.use(
       clientSecret: process.env.client_secret,
       callbackURL: "http://localhost:3001/auth/spotify/callback",
     },
-    function (accessToken, refreshToken, expires_in, profile, done) {
-      process.nextTick(function () {
+    async function (accessToken, refreshToken, expires_in, profile, done) {
+      
         // To keep the example simple, the user's spotify profile is returned to
         // represent the logged-in user. In a typical application, you would want
         // to associate the spotify account with a user record in your database,
         // and return that user instead.
-        return done(null, profile);
-      });
+        
+       const existingUser = await User.findOne({ where: {spotifyId: profile.id }});
+
+        if(!existingUser){
+          const newUser = await User.create({
+            spotifyId: profile.id
+          })
+            return newUser;
+        }
+        return existingUser;
+      
     }
   )
 );
 
 
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => console.log("Now listening", PORT));
 
-app.listen(PORT, () => console.log("Now listening", PORT));
+});
