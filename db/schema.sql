@@ -1,1 +1,1 @@
-CREATE DATABASE spoofify_db
+CREATE DATABASE spoofify_db;
