@@ -38,9 +38,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 app.use(routes);
 
-// sequelize.sync({ force: false }).then(() => {
-//
-//   });
+
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -58,10 +56,6 @@ passport.use(
     },
     function (accessToken, refreshToken, expires_in, profile, done) {
       process.nextTick(function () {
-        // To keep the example simple, the user's spotify profile is returned to
-        // represent the logged-in user. In a typical application, you would want
-        // to associate the spotify account with a user record in your database,
-        // and return that user instead.
         return done(null, profile);
       });
     }
@@ -69,5 +63,7 @@ passport.use(
 );
 
 
-
+sequelize.sync({ force: false }).then(() => {
 app.listen(PORT, () => console.log("Now listening", PORT));
+  });
+
