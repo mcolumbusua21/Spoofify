@@ -16,10 +16,10 @@ User.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    // userName: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
+    accessToken: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     spotifyId: {
       type: DataTypes.STRING,
       allowNull: false,
