@@ -3,49 +3,53 @@ const passport = require("passport");
 const SpotifyStrategy = require("passport-spotify").Strategy;
 const path = require("path");
 const express = require("express");
-const session = require('express-session');
-const exphbs = require('express-handlebars');
-const routes = require('./controllers');
+const session = require("express-session");
+const exphbs = require("express-handlebars");
+const routes = require("./controllers");
 const { User } = require("./models");
+var SpotifyWebApi = require("spotify-web-api-node");
 
-const sequelize = require('./config/connection');
+const sequelize = require("./config/connection");
 
 const hbs = exphbs.create({});
 
 // //Creating new sequelize store
-// const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 const sess = {
-    secret: 'Rainbow Kitten Suprise',
-    resave: true,
-    saveUninitialized: true,
-    // store: new SequelizeStore({
-    //     db: sequelize
-    // })
+  secret: "Rainbow Kitten Suprise",
+  cookie: {},
+  resave: true,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
 };
 
- //Middleware
-// app.use(session(sess))
+//Middleware
+app.use(session(sess));
 
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
+// app.use(passport.session());
 app.use(routes);
 
-
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  done(null, user.id);
 });
 
-passport.deserializeUser(function (obj, done) {
-  done(null, obj);
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
 });
 
 passport.use(
@@ -57,27 +61,62 @@ passport.use(
     },
     async function (accessToken, refreshToken, expires_in, profile, done) {
       
-        // To keep the example simple, the user's spotify profile is returned to
-        // represent the logged-in user. In a typical application, you would want
-        // to associate the spotify account with a user record in your database,
-        // and return that user instead.
-        
-       const existingUser = await User.findOne({ where: {spotifyId: profile.id }});
+      // To keep the example simple, the user's spotify profile is returned to
+      // represent the logged-in user. In a typical application, you would want
+      // to associate the spotify account with a user record in your database,
+      // and return that user instead.
 
-        if(!existingUser){
-          const newUser = await User.create({
-            spotifyId: profile.id
-          })
-            return newUser;
+      const existingUser = await User.findOne({
+        where: { spotifyId: profile.id },
+      }
+      );
+
+      if (!existingUser) {
+        const newUser = await User.create({
+          spotifyId: profile.id,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          expires_in: expires_in,
+        });
+        return done(null, newUser);
+      }
+      existingUser.update(
+        {
+          accessToken: accessToken
         }
-        return existingUser;
-      
+      )
+      return done(null, existingUser);
     }
   )
 );
 
 
+  // passport.use(
+  //   new SpotifyStrategy(
+  //     {
+  //       clientID: process.env.client_id,
+  //       clientSecret: process.env.client_secret,
+  //       callbackURL: "http://localhost:3001/auth/spotify/callback",
+  //     },
+  //     async (accessToken, refreshToken, expires_in, profile, done) => {
+  //       // Initialize spotifyapi object
+  //       var spotifyApi = new SpotifyWebApi({
+  //         clientID: process.env.client_id,
+  //         clientSecret: process.env.client_secret,
+  //         callbackURL: "http://localhost:3001/auth/spotify/callback",
+  //       });
+
+  //       // Set accesstoken for api objct
+  //       spotifyApi.setAccessToken(accessToken);
+
+  //       return done(null, profile);
+  //     }
+  //   )
+  // );
+
+  // module.exports = spotifyApi;
+
+
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log("Now listening", PORT));
-
 });

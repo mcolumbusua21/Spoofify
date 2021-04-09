@@ -1,5 +1,28 @@
 <div>
     <p>
-        HOMEPAGE {{{user}}}
+        Welcome {{{user}}}!
     </p>
 </div>
+
+{{#each artist}}
+<div>
+    <h1>
+        {{artist}}
+    </h1>
+</div>
+{{/each}}
+
+<form class="form artist-search-form">
+      <div class="form-group">
+        <label for="artist-search">Search Artist: </label>
+        <input class="form-input" type="text" id="artist-search" name="artist-search" />
+      </div>
+      
+      
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" id="searchBtn" >Search</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/js/home.js"></script>
