@@ -20,6 +20,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    expires_in: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     spotifyId: {
       type: DataTypes.STRING,
       allowNull: false,
