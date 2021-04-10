@@ -1,3 +1,8 @@
 const User = require('./User');
+const Search = require('./search')
 
-module.exports = { User };
+
+// user has many search
+//search belong to user?
+
+module.exports = { User , Search};

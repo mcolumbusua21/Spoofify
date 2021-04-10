@@ -1,4 +1,23 @@
 #navBackground {
-    background-color: #0C386B;
+    background-color: red;
     color: #fff;
+    
 }
+
+#searchedArtist {
+    text-align: center;
+}
+
+#artistImage {
+    height: 200px;
+    width: 200px;
+}
+
+
+.body {
+    color: green;
+}
+
+@media (max-width: 575.98px) { 
+    navbar
+ }
