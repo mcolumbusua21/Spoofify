@@ -90,33 +90,6 @@ passport.use(
   )
 );
 
-
-  // passport.use(
-  //   new SpotifyStrategy(
-  //     {
-  //       clientID: process.env.client_id,
-  //       clientSecret: process.env.client_secret,
-  //       callbackURL: "http://localhost:3001/auth/spotify/callback",
-  //     },
-  //     async (accessToken, refreshToken, expires_in, profile, done) => {
-  //       // Initialize spotifyapi object
-  //       var spotifyApi = new SpotifyWebApi({
-  //         clientID: process.env.client_id,
-  //         clientSecret: process.env.client_secret,
-  //         callbackURL: "http://localhost:3001/auth/spotify/callback",
-  //       });
-
-  //       // Set accesstoken for api objct
-  //       spotifyApi.setAccessToken(accessToken);
-
-  //       return done(null, profile);
-  //     }
-  //   )
-  // );
-
-  // module.exports = spotifyApi;
-
-
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log("Now listening", PORT));
 });
