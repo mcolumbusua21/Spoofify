@@ -2,3 +2,13 @@
     background-color: #0C386B;
     color: #fff;
 }
+
+#searchedArtist {
+    text-align: center;
+}
+
+#artistImage {
+    height: 200px;
+    width: 200px;
+}
+

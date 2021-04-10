@@ -12,6 +12,8 @@ const newFormHandler = async (e) => {
 
     if (response.ok) {
         console.log("SEARCH WENT THROUGH")
+        document.location.replace(`/artist`)
+        // document.location.reload()
     } else {
         console.log("FAILED TO SEARCH ARTIST")
     }

@@ -1,0 +1,34 @@
+<div class="searchedArtist">
+    <h3>
+
+        {{artist}}
+    </h3>
+    <br>
+    <p>
+        Genre: {{genre}}
+
+    </p>
+    <div class="image">
+
+        <img src="{{img.url}}" alt="picture of {{artist}}" width="300px" height="300px">
+
+        <div>
+            <h3>
+                Top Songs
+            </h3>
+            {{#each songs}}
+         
+            <p>
+
+                <a href="{{external_urls.spotify}}" target="_blank" >{{name}}</a>
+                 
+                {{!-- {{{songs}}} --}}
+            </p>
+           
+            {{/each}}
+
+        </div>
+    </div>
+
+
+</div>
