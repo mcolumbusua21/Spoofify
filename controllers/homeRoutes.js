@@ -5,6 +5,9 @@ var SpotifyWebApi = require("spotify-web-api-node");
 const fetch = require("node-fetch");
 const path = require('path');
 
+let artistName;
+let artistId;
+let artistImg;
 
 router.get("/", isAuth, async (req, res) => {
   // @ ToDo NEED TO CHECK ROUTES! IF NOT LOGGED IN, GO TO LOGIN PAGE!
@@ -46,35 +49,36 @@ router.get("/artist/:band", async (req, res) => {
     const artist = await (await spotifyApi.searchArtists(bandName)).body.artists
       .items[0];
 
-    console.log(artist);
+      
+      console.log(artistName, "BEFORE ");
+    artistName = artist.name;
+    artistId = artist.id;
+    artistImg = artist.images[0];
+    console.log(artistName, "AFTER ");
+    console.log(artist)
+    // const response = await fetch('http://localhost:3001/api/search/', {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     artist: artistName,
+    //     artist_id: artistId,
+    //     img: artistImg,
+    //     user_id: currentUser,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // if (response.ok) {
+    //   res.redirect("/artist");
+    // } else {
+    //   console.log("Failed to search band");
+    // }
 
-    const artistName = artist.name;
-    const artistId = artist.id;
-    const artistImg = artist.images[0];
+    // const newArtist = artist.get({ plain: true})
 
-    const response = await fetch('http://localhost:3001/api/search/', {
-      method: "POST",
-      body: JSON.stringify({
-        artist: artistName,
-        artist_id: artistId,
-        img: artistImg,
-        user_id: currentUser,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.ok) {
-      res.redirect("/artist");
-    } else {
-      console.log("Failed to search band");
-    }
-
-    // const artist = artist.get({ plain: true})
-
-    // res.render('home', {
-    //   artist: artist.name
-    // })
+    res.render('login', {
+      artist: "testing"
+    })
   } catch (err) {
     console.log("ERROR AT ARTIST ROUTE", err);
   }
