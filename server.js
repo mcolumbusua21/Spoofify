@@ -67,9 +67,9 @@ passport.use(
       // and return that user instead.
 
       const existingUser = await User.findOne({
-        where: { spotifyId: profile.id },
-      }
-      );
+        where: { spotify_id: profile.id },
+      });
+      console.log('EXISTINGUSER==>',existingUser)
 
       if (!existingUser) {
         const newUser = await User.create({

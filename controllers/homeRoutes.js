@@ -3,12 +3,12 @@ const { User } = require("../models");
 const passport = require("passport");
 var SpotifyWebApi = require("spotify-web-api-node");
 
-router.get("/login", isAuth, (req, res) => {
-  res.redirect("/");
-});
-router.get("/", (req, res) => {
-  res.render("login");
-});
+// router.get("/login", isAuth, (req, res) => {
+//   res.redirect("/");
+// });
+// router.get("/", (req, res) => {
+//   res.render("login");
+// });
 
 
 
@@ -20,10 +20,10 @@ router.get("/", isAuth, async (req, res) => {
 
 router.get("/login", async (req, res) => {
   // res.redirect("/"); let accessToken = userData[0].dataValues.accessToken
-  console.log(req.session);
+  console.log('===---> REQ stuff',req);
   // spotifyApi.setAccessToken(accessToken)
-  const userData = await User.findByPk(req.session.passport.user)
-  const spotifyId = userData.get({ plain: true }).spotifyId
+  // const userData = await User.findByPk(req.session.passport.user)
+  // const spotifyId = userData.get({ plain: true }).spotifyId
   // let spotifyId = userData[0].dataValues.spotifyId
 
   res.render("home", {user: spotifyId});
@@ -39,7 +39,8 @@ var spotifyApi = new SpotifyWebApi({
 router.get("/artist/:band", async (req, res) => {
   try {
     console.log("Artist route");
-    const currentUser = await User.findByPk(req.session.passport.user);
+    console.log('Session user=> ',req.session.passport.user)
+    // const currentUser = await User.findByPk(req.session.passport.user.spotifyId);
     // console.log(currentUser.get({ plain: true }))
     const accessToken = currentUser.get({ plain: true }).accessToken;
     const refreshToken = currentUser.get({ plain: true }).refreshToken;
