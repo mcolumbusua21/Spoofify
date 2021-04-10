@@ -8,22 +8,22 @@ const path = require('path');
 let artistName;
 let artistId;
 let artistImg;
+let artistGenre;
+let songData;
 
 router.get("/", isAuth, async (req, res) => {
-  // @ ToDo NEED TO CHECK ROUTES! IF NOT LOGGED IN, GO TO LOGIN PAGE!
-  // OR ELSE MACHINE WONT RECOGNIZE NEW SPOTIFYID VARIABLE
   res.render("login");
 });
 
 router.get("/login", async (req, res) => {
-  // res.redirect("/"); let accessToken = userData[0].dataValues.accessToken
+
   console.log(req.session);
-  // spotifyApi.setAccessToken(accessToken)
+
   const userData = await User.findByPk(req.session.passport.user);
   const spotifyId = userData.get({ plain: true }).spotifyId;
-  // let spotifyId = userData[0].dataValues.spotifyId
 
-  res.render("home", { user: spotifyId });
+
+  res.render("home", { user: spotifyId, artist: artistName });
 });
 
 var spotifyApi = new SpotifyWebApi({
@@ -44,18 +44,33 @@ router.get("/artist/:band", async (req, res) => {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
 
-    //get arist by Name
+    //get artist by Name
     const bandName = req.params.band;
-    const artist = await (await spotifyApi.searchArtists(bandName)).body.artists
+    const artist = (await spotifyApi.searchArtists(bandName)).body.artists
       .items[0];
 
+    
+   
       
-      console.log(artistName, "BEFORE ");
+    //global variables now have information to then pass into the /artist route
     artistName = artist.name;
     artistId = artist.id;
     artistImg = artist.images[0];
-    console.log(artistName, "AFTER ");
-    console.log(artist)
+    artistGenre = artist.genres[0];
+   
+    
+
+    //Get top tracks from artist
+    const searchSong = (await spotifyApi.getArtistTopTracks(artistId, 'US'))
+
+    songData = searchSong.body.tracks
+   
+  //  console.log(searchSong.body.tracks) 
+
+
+
+    // @ToDo set up a POST route to save info to Search model
+
     // const response = await fetch('http://localhost:3001/api/search/', {
     //   method: "POST",
     //   body: JSON.stringify({
@@ -71,7 +86,7 @@ router.get("/artist/:band", async (req, res) => {
     // if (response.ok) {
     //   res.redirect("/artist");
     // } else {
-    //   console.log("Failed to search band");
+    //   console.log("Failed to post band");
     // }
 
     // const newArtist = artist.get({ plain: true})
@@ -86,20 +101,12 @@ router.get("/artist/:band", async (req, res) => {
 
 router.get("/artist", async (req, res) => {
   try {
-    const searchData = await Search.findAll({
-      include: [
-        {
-          model: User,
-          attribute: ["spotifyId"],
-        },
-      ],
-    });
-
-    const search = searchData.map((search) => search.get({ plain: true }))
-
+    console.log("SONG DATA ",songData[0].name)
     res.render('artist', {
-      search,
-      logged_in: req.session.logged_in
+      artist: artistName,
+      img: artistImg,
+      genre: artistGenre,
+      songs: songData
     })
   } catch (err){
     res.status(500).json(err)
