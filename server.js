@@ -57,7 +57,7 @@ passport.use(
     {
       clientID: process.env.client_id,
       clientSecret: process.env.client_secret,
-      callbackURL: "https://spoofify13.herokuapp.com/callback",
+      callbackURL: "https://spoofify13.herokuapp.com/auth/spotify/callback",
     },
     async function (accessToken, refreshToken, expires_in, profile, done) {
       
