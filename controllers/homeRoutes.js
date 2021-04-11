@@ -83,6 +83,7 @@ router.get(
   "/auth/spotify",
   passport.authenticate("spotify", {
     scope: ["user-read-email", "user-read-private"],
+    show_dialog: true,
   }),
   function (req, res) {}
 );
