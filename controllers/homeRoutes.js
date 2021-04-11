@@ -29,7 +29,7 @@ router.get("/login", async (req, res) => {
 var spotifyApi = new SpotifyWebApi({
   clientID: process.env.client_id,
   clientSecret: process.env.client_secret,
-  callbackURL: "http://localhost:3001/auth/spotify/callback",
+  callbackURL: process.env.REDIRECT_URI || "http://localhost:3001/auth/spotify/callback",
 });
 
 // TESTING GET ARTIST ROUTE
