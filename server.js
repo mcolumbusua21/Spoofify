@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 app.use(routes);
 
 passport.serializeUser(function (user, done) {
@@ -47,8 +47,9 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
+  User.findByPk(id)
+  .then (function (user) {
+    done(null, user);
   });
 });
 

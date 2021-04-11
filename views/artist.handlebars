@@ -1,3 +1,17 @@
+<form class="form artist-search-form">
+    <div class="form-group">
+        <label for="artist-search">Search Artist: </label>
+        <input class="form-input" type="text" id="artist-search" name="artist-search" />
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" id="searchBtn">Search</button>
+
+        {{!-- <button type="button" class="btn btn-primary" id="saveBtn">Save This Search</button> --}}
+    </div>
+</form>
+
 <div class="searchedArtist">
     <h3>
 
@@ -17,14 +31,14 @@
                 Top Songs
             </h3>
             {{#each songs}}
-         
+
             <p>
 
-                <a href="{{external_urls.spotify}}" target="_blank" >{{name}}</a>
-                 
-                {{!-- {{{songs}}} --}}
+                <a href="{{external_urls.spotify}}" target="_blank">{{name}}</a>
+
+
             </p>
-           
+
             {{/each}}
 
         </div>
@@ -32,3 +46,6 @@
 
 
 </div>
+
+<script src="/js/home.js"></script>
+<script src="/js/saveSearch.js"></script>

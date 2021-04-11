@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Search } = require('../../models');
 
+
 router.post('/', async (req, res) => {
     try{
         const searchData = await Search.create({
