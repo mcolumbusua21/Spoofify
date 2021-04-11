@@ -36,6 +36,7 @@ var spotifyApi = new SpotifyWebApi({
 router.get("/artist/:band", async (req, res) => {
   try {
     console.log("Artist route");
+    console.log('Session user=> ',req.session.passport.user)
     const currentUser = await User.findByPk(req.session.passport.user);
     // console.log(currentUser.get({ plain: true }))
     const accessToken = currentUser.get({ plain: true }).accessToken;
