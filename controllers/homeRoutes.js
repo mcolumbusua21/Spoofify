@@ -3,7 +3,7 @@ const { User } = require("../models");
 const passport = require("passport");
 var SpotifyWebApi = require("spotify-web-api-node");
 const fetch = require("node-fetch");
-const path = require('path');
+const path = require("path");
 
 let artistName;
 let artistId;
@@ -16,12 +16,10 @@ router.get("/", isAuth, async (req, res) => {
 });
 
 router.get("/login", async (req, res) => {
-
-  console.log(req.session);
+  console.log("HERE IT IS", req.session);
 
   const userData = await User.findByPk(req.session.passport.user);
   const spotifyId = userData.get({ plain: true }).spotifyId;
-
 
   res.render("home", { user: spotifyId, artist: artistName });
 });
@@ -35,8 +33,6 @@ var spotifyApi = new SpotifyWebApi({
 // TESTING GET ARTIST ROUTE
 router.get("/artist/:band", async (req, res) => {
   try {
-    console.log("Artist route");
-    console.log('Session user=> ',req.session.passport.user)
     const currentUser = await User.findByPk(req.session.passport.user);
     // console.log(currentUser.get({ plain: true }))
     const accessToken = currentUser.get({ plain: true }).accessToken;
@@ -50,51 +46,20 @@ router.get("/artist/:band", async (req, res) => {
     const artist = (await spotifyApi.searchArtists(bandName)).body.artists
       .items[0];
 
-    
-   
-      
     //global variables now have information to then pass into the /artist route
     artistName = artist.name;
     artistId = artist.id;
     artistImg = artist.images[0];
     artistGenre = artist.genres[0];
-   
-    
 
     //Get top tracks from artist
-    const searchSong = (await spotifyApi.getArtistTopTracks(artistId, 'US'))
+    const searchSong = await spotifyApi.getArtistTopTracks(artistId, "US");
 
-    songData = searchSong.body.tracks
-   
-  //  console.log(searchSong.body.tracks) 
+    songData = searchSong.body.tracks;
 
-
-
-    // @ToDo set up a POST route to save info to Search model
-
-    // const response = await fetch('http://localhost:3001/api/search/', {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     artist: artistName,
-    //     artist_id: artistId,
-    //     img: artistImg,
-    //     user_id: currentUser,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // if (response.ok) {
-    //   res.redirect("/artist");
-    // } else {
-    //   console.log("Failed to post band");
-    // }
-
-    // const newArtist = artist.get({ plain: true})
-
-    res.render('login', {
-      artist: "testing"
-    })
+    res.render("login", {
+      artist: "testing",
+    });
   } catch (err) {
     console.log("ERROR AT ARTIST ROUTE", err);
   }
@@ -102,15 +67,15 @@ router.get("/artist/:band", async (req, res) => {
 
 router.get("/artist", async (req, res) => {
   try {
-    console.log("SONG DATA ",songData[0].name)
-    res.render('artist', {
+    console.log("SONG DATA ", songData[0].name);
+    res.render("artist", {
       artist: artistName,
       img: artistImg,
       genre: artistGenre,
-      songs: songData
-    })
-  } catch (err){
-    res.status(500).json(err)
+      songs: songData,
+    });
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 
@@ -118,6 +83,7 @@ router.get(
   "/auth/spotify",
   passport.authenticate("spotify", {
     scope: ["user-read-email", "user-read-private"],
+    show_dialog: true,
   }),
   function (req, res) {}
 );
